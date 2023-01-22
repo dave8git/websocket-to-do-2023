@@ -6,7 +6,7 @@ import socket from 'socket.io-client';
 
 const App = () => {
   //const [socket, setSocket] = useState(null);
-  const [io, setIO] = useState(socket());
+  const [io, setIO] = useState(socket('localhost:8000'));
   const [taskName, setTaskName] = useState('');
   const emit = true;
 
