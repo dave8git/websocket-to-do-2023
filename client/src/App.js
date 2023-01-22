@@ -1,19 +1,21 @@
 import io from 'socket.io-client';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import socket from 'socket.io-client';
 
 
 const App = () => {
-  const [socket, setSocket] = useState(null);
+  //const [socket, setSocket] = useState(null);
+  const [io, setIO] = useState(socket());
   const [taskName, setTaskName] = useState('');
   const emit = true;
 
   useEffect(() => {
-    const socket = io('localhost:8000');
-    setSocket(socket);
-    socket.on('addTask', (task) => addTask(task));
-    socket.on('removeTask', (id) => removeTask(id));
-    socket.on('updateData', (tasks) => updateTasks(tasks));
+    // const socket = io('localhost:8000');
+    // setSocket(socket);
+    io.on('addTask', (task) => addTask(task));
+    io.on('removeTask', (id) => removeTask(id));
+    io.on('updateData', (tasks) => updateTasks(tasks));
   }, []);
   
   const [ tasks, setTasks ] = useState([]);
@@ -21,14 +23,14 @@ const App = () => {
   const removeTask = (id, emit) => {
     setTasks(tasks => tasks.filter(task => task.id !== id));
     if (emit) {
-      socket.emit('removeTask', id)
+      io.emit('removeTask', id)
     }
   }
 
   const submitForm = (event) => {
     event.preventDefault();
     addTask({id: uuidv4(), name: taskName});
-    socket.emit('addTask', {id: uuidv4, name: taskName });
+    io.emit('addTask', {id: uuidv4, name: taskName });
   }
   
   const addTask = task => {

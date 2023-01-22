@@ -7,7 +7,7 @@ const server = app.listen(process.env.PORT || 8000, () => {
 });
 
 const tasks = [];
-const io = socket(server);
+const io = socket(server, { cors: {origin: "*"}});
 
 io.on('connection', (socket) => { //connection - jest to event wysyłany automatycznie przez każdy socket w momencie inicjacji połączenia. 
     socket.emit('updateData', tasks); // user uruchamia aplikację i od razu otrzymuje wszystkie taski w liście (przechowywane w tablicy tasks)
